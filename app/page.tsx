@@ -1,14 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { useExpenseContext } from "./providers";
 import { SummaryCards } from "@/components/SummaryCards";
 import { SpendingCharts } from "@/components/SpendingCharts";
 import { CategoryBreakdown } from "@/components/CategoryBreakdown";
 import { ExpenseList } from "@/components/ExpenseList";
-import { Plus } from "lucide-react";
+import { ExportDrawer } from "@/components/ExportDrawer";
+import { CloudUpload, Plus } from "lucide-react";
 
 export default function DashboardPage() {
   const { expenses, loaded, updateExpense, deleteExpense, openAddModal } = useExpenseContext();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   if (!loaded) {
     return (
@@ -27,7 +30,20 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-500 text-sm mt-0.5">Your financial overview at a glance</p>
         </div>
+        <button
+          onClick={() => setDrawerOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-xl text-sm font-medium hover:from-indigo-700 hover:to-blue-700 transition-all shadow-sm shadow-blue-200"
+        >
+          <CloudUpload size={15} />
+          Sync & Export
+        </button>
       </div>
+
+      <ExportDrawer
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        expenses={expenses}
+      />
 
       <SummaryCards expenses={expenses} />
       <SpendingCharts expenses={expenses} />
