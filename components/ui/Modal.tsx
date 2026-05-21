@@ -3,14 +3,21 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 
+const SIZE_CLASSES = {
+  md: "max-w-lg",
+  lg: "max-w-2xl",
+  xl: "max-w-5xl",
+};
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  size?: keyof typeof SIZE_CLASSES;
 }
 
-export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, size = "md" }: ModalProps) {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -27,7 +34,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className={`relative bg-white rounded-2xl shadow-2xl w-full ${SIZE_CLASSES[size]} max-h-[90vh] overflow-y-auto`}>
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
           <button

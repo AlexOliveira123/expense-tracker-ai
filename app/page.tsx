@@ -1,14 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { useExpenseContext } from "./providers";
 import { SummaryCards } from "@/components/SummaryCards";
 import { SpendingCharts } from "@/components/SpendingCharts";
 import { CategoryBreakdown } from "@/components/CategoryBreakdown";
 import { ExpenseList } from "@/components/ExpenseList";
-import { Plus } from "lucide-react";
+import { ExportModal } from "@/components/ExportModal";
+import { Download, Plus } from "lucide-react";
 
 export default function DashboardPage() {
   const { expenses, loaded, updateExpense, deleteExpense, openAddModal } = useExpenseContext();
+  const [exportOpen, setExportOpen] = useState(false);
 
   if (!loaded) {
     return (
@@ -27,7 +30,20 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-500 text-sm mt-0.5">Your financial overview at a glance</p>
         </div>
+        <button
+          onClick={() => setExportOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-700 transition-colors shadow-sm"
+        >
+          <Download size={15} />
+          Export Data
+        </button>
       </div>
+
+      <ExportModal
+        isOpen={exportOpen}
+        onClose={() => setExportOpen(false)}
+        allExpenses={expenses}
+      />
 
       <SummaryCards expenses={expenses} />
       <SpendingCharts expenses={expenses} />
