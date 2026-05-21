@@ -5,7 +5,8 @@ import { SummaryCards } from "@/components/SummaryCards";
 import { SpendingCharts } from "@/components/SpendingCharts";
 import { CategoryBreakdown } from "@/components/CategoryBreakdown";
 import { ExpenseList } from "@/components/ExpenseList";
-import { Plus } from "lucide-react";
+import { Download, Plus } from "lucide-react";
+import { exportToCSV } from "@/lib/utils";
 
 export default function DashboardPage() {
   const { expenses, loaded, updateExpense, deleteExpense, openAddModal } = useExpenseContext();
@@ -27,6 +28,14 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-500 text-sm mt-0.5">Your financial overview at a glance</p>
         </div>
+        <button
+          onClick={() => exportToCSV(expenses)}
+          disabled={expenses.length === 0}
+          className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <Download size={15} />
+          Export Data
+        </button>
       </div>
 
       <SummaryCards expenses={expenses} />
